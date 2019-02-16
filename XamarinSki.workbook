@@ -1,0 +1,49 @@
+---
+uti: com.xamarin.workbook
+id: b47b0416-611a-4120-a28d-aea933acdb6d
+title: Untitled
+platforms:
+- MacMobile
+packages:
+- id: FSharp.Core
+  version: 4.6.2
+- id: MatplotlibCS
+  version: 1.0.61
+- id: XPlot.Plotly
+  version: 1.5.0
+---
+
+```csharp
+#r "FSharp.Core" 
+#r "XPlot.Plotly"
+```
+
+```csharp
+using XPlot.Plotly;
+using System.IO; 
+using System.Linq;
+```
+
+```csharp
+string[] text = System.IO.File.ReadAllLines("4x4.txt");
+
+float[][] z = text.Skip(1).ToList().ConvertAll(t => t.Split(' ').ToList()
+                  .ConvertAll(r => Convert.ToSingle(r)).ToArray()).ToArray();
+
+var layout = new Layout.Layout() { title = "Mountain Elevation - Heat map", autosize = true, margin = new Graph.Margin() 
+                                 { l = 65, r = 50, b = 65, t = 90 }}; 
+
+var surfaceplot = Chart.Plot(new Graph.Surface() { z = z }, layout);
+    surfaceplot.WithWidth(700); 
+    surfaceplot.WithHeight(800);
+
+surfaceplot.GetHtml().AsHtml();
+```
+
+```csharp
+var surfaceplot = Chart.Plot(new Graph.Heatmap() { z = z }, layout);
+    surfaceplot.WithWidth(700); 
+    surfaceplot.WithHeight(800);
+
+surfaceplot.GetHtml().AsHtml();
+```
